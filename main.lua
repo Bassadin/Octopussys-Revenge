@@ -916,8 +916,8 @@ function love.update(dt)
 										v["x"] = math.sin(v["y"]) * dt
 										v["y"] = math.sin(v["x"]) * dt
 									elseif v["type"] == "cos" then
-										v["x"] = v["x"] + (spaceship.SIN.bulletSpeed * math.cos(v["mathX"]) * dt)
-										v["y"] = v["y"] + (spaceship.SIN.bulletSpeed * math.cos(v["mathX"]) * dt)
+										v["x"] = math.cos(v["mathX"]) * dt
+										v["y"] = math.cos(v["mathX"]) * dt
 									end
 								end
 								
