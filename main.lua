@@ -8,8 +8,6 @@
 	
 	require ("Libraries.TSerial") --Initialisiert TSerial
 	
-	--require ("Libraries.slam") --Initialisiert SLAM
-	
 	
 	--Load other Lua's
 		require "lua/intro"
@@ -900,16 +898,6 @@ function love.update(dt)
 									
 									spaceship.SIN.bulletShootingTime = 0
 								end
-								
-								--[[for i,v in ipairs(spaceship.SIN.bullets) do
-									if v["type"] == "sin" then
-										v["x"] = v["x"] + (spaceship.SIN.bulletSpeed * math.sin(v["mathX"]) * dt)
-										v["y"] = v["y"] + (spaceship.SIN.bulletSpeed * math.sin(v["mathX"]) * dt)
-									elseif v["type"] == "cos" then
-										v["x"] = v["x"] + (spaceship.SIN.bulletSpeed * math.cos(v["mathX"]) * dt)
-										v["y"] = v["y"] + (spaceship.SIN.bulletSpeed * math.cos(v["mathX"]) * dt)
-									end
-								end]]--
 								
 								for i,v in ipairs(spaceship.SIN.bullets) do
 									if v["type"] == "sin" then
