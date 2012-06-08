@@ -55,7 +55,7 @@ function love.load()
 		cursorVisible = false
 		gameState = "intro"
 		gameActive = false
-		versionNumber = "0.5.3"
+		versionNumber = "0.5.4"
 		
 		--[[
 			Gamestates:
@@ -179,7 +179,7 @@ function love.load()
 					
 					
 				weaponLevel = {[1] = 1, [2] = 0, [3] = 0}	
-				weaponDefaultLevel = {[1] = 1, [2] = 0, [3] = 0}	
+				weaponDefaultLevel = weaponLevel	
 				weaponMaxLevel = {[1] = 5, [2] = 5, [3] = 2}	
 
 				weaponUpgradePrices = {
@@ -378,7 +378,7 @@ function love.load()
 			maxHealth = 100,
 			healthRegenerationRate = 5,
 			healthRegenerationAmount = 1,
-			weapon = "LMG",
+			weapon = "lmg",
 			moveSpeed = 300,
 			ammo = 100,
 			maxAmmo = 100,
@@ -420,12 +420,15 @@ function love.load()
 			
 				ammoConsumption = 10,
 				defaultBulletDamage = 50,
-				bulletDamage = 50,
-				bulletFireRate = 0.4,
+				bulletDamage = 5,
+				bulletFireRate = 0.05,
 				bulletShootingTime = 0,
-				bulletSpeed = 30,
+				bulletSpeed = 18,
 				bullets = {},
-				shooting = false
+				shooting = false,
+				
+				amplitude = 50,
+				waveLength = 70
 			
 			},
 			
@@ -533,11 +536,17 @@ function love.update(dt)
 				levelFontIsRedTime = 0
 			end
 		
-		for i,v in ipairs(enemies) do
-			if v["shootingTime"] ~= nil then
-				v["shootingTime"] = v["shootingTime"] + dt
+			for i,v in ipairs(enemies) do
+				if v["shootingTime"] ~= nil then
+					v["shootingTime"] = v["shootingTime"] + dt
+				end
 			end
-		end
+			
+			for i,v in ipairs(spaceship.SIN.bullets) do
+				if v["sintime"] ~= nil then
+					v["sintime"] = v["sintime"] + dt * spaceship.SIN.bulletSpeed
+				end
+			end
 		
 	--Variablenaktualisierung
 		screenwidth = lg.getWidth()
@@ -749,8 +758,8 @@ function love.update(dt)
 							if spaceship.y > screenheight - 50 then spaceship.y = screenheight - 50 end
 							
 						--Schießen
-							--LMG	
-								if lkid(" ") and spaceship.weapon == "LMG" and weaponLevel[1] > 0 then
+							--lmg	
+								if lkid(" ") and spaceship.weapon == "lmg" and weaponLevel[1] > 0 then
 									spaceship.lmg.shooting = true
 								else
 									spaceship.lmg.shooting = false
@@ -863,9 +872,15 @@ function love.update(dt)
 													
 													applyDamageToEnemy(i, spaceship.laser.laserDamage)
 													
+													setLaserLength(v["x"])
+													
 												spaceship.laser.laserDamageTime = 0
 											end
 												
+										else
+										
+											setLaserLength(screenwidth)
+										
 										end
 										
 									end
@@ -892,6 +907,7 @@ function love.update(dt)
 									
 									elseif weaponLevel[3] == 2 then
 									
+										spawnSINBullet("sin")
 										spawnSINBullet("cos")
 										
 									end
@@ -899,16 +915,20 @@ function love.update(dt)
 									spaceship.SIN.bulletShootingTime = 0
 								end
 								
+									
 								for i,v in ipairs(spaceship.SIN.bullets) do
 									if v["type"] == "sin" then
-										v["x"] = math.sin(v["y"]) * dt
-										v["y"] = math.sin(v["x"]) * dt
+										v["x"] = math.cos(0) * v["sintime"] * (spaceship.SIN.waveLength / (2 * math.pi)) + ((spaceship.SIN.amplitude / 2) * math.sin(v["sintime"]) * math.sin(0))
+										v["y"] = math.sin(0) * v["sintime"] * (spaceship.SIN.waveLength / (2 * math.pi)) - ((spaceship.SIN.amplitude / 2) * math.sin(v["sintime"]) * math.cos(0))
+										v["x"] = v["x"] + v["sx"]
+										v["y"] = v["y"] + v["sy"]
 									elseif v["type"] == "cos" then
-										v["x"] = math.cos(v["mathX"]) * dt
-										v["y"] = math.cos(v["mathX"]) * dt
+										v["x"] = math.cos(0) * v["sintime"] * (spaceship.SIN.waveLength / (2 * math.pi)) - ((spaceship.SIN.amplitude / 2) * math.sin(v["sintime"]) * math.sin(0))
+										v["y"] = math.sin(0) * v["sintime"] * (spaceship.SIN.waveLength / (2 * math.pi)) + ((spaceship.SIN.amplitude / 2) * math.sin(v["sintime"]) * math.cos(0))
+										v["x"] = v["x"] + v["sx"]
+										v["y"] = v["y"] + v["sy"]
 									end
 								end
-								
 								
 								for i,v in ipairs(spaceship.SIN.bullets) do
 									if v["x"] > screenwidth + 20 then table.remove(spaceship.SIN.bullets, i) end
@@ -1083,7 +1103,7 @@ function love.update(dt)
 			
 			if spaceship.ammo < spaceship.maxAmmo then 
 			
-				if spaceship.lmg.shooting == false and spaceship.laser.laserActive == false and spaceship.SIN.shooting == false then		
+				if spaceship.lmg.shooting == false and spaceship.laser.laserActive == false and spaceship.SIN.shooting == false and lkid(" ") == false then		
 					spaceship.ammo = spaceship.ammo + spaceship.ammoRegenSpeed * dt						
 				end
 			
@@ -1238,7 +1258,7 @@ function love.draw()
 	if gameState == "game" or gameState == "pauseMenu" or gameState == "upgrades" then	
 
 		--Raumschiff
-			if spaceship.weapon == "LMG" then
+			if spaceship.weapon == "lmg" then
 				spaceship.syncfighterLMG:draw(spaceship.x, spaceship.y) 
 			elseif spaceship.weapon == "Laser" then
 				spaceship.syncfighterLMG:draw(spaceship.x, spaceship.y)
@@ -1283,7 +1303,7 @@ function love.draw()
 						end
 				end	
 		--Schießen
-			--LMG	
+			--lmg	
 				for i,v in ipairs(spaceship.lmg.bullets) do
 					lg.draw(bullet, v["x"], v["y"], math.rad(90), 4, 4)
 				end
@@ -1293,7 +1313,7 @@ function love.draw()
 				end
 			--SIN	
 				for i,v in ipairs(spaceship.SIN.bullets) do
-					lg.draw(SINbullet, v["x"], v["y"], math.rad(90), 2, 2)
+					lg.draw(SINbullet, v["x"], v["y"], math.rad(0), 2, 2)
 				end
 			
 		--Gegner
@@ -1371,7 +1391,7 @@ function love.draw()
 			-- Zeichnet das Healthschiff und die Waffe
 				lg.draw( gui_healthship, bar.health.x - 32 , lg.getHeight() - gui_healthship:getHeight() - 6 )
 				
-				if spaceship.weapon == "LMG" then
+				if spaceship.weapon == "lmg" then
 				
 					lg.draw(guiWeaponLmg, bar.ammo.x - 32 , lg.getHeight() - guiWeaponLmg:getHeight() - 10)
 					
@@ -1590,7 +1610,6 @@ function love.draw()
 			lg.draw(optionsMenuTitleIMG, lg.getWidth() / 2 - optionsMenuTitleIMG:getWidth() / 2 , 0, 0, 1, 1)
 	
 	end
-	
 end
 
 function love.keypressed(key, unicode)
@@ -1628,7 +1647,7 @@ function love.keypressed(key, unicode)
 			
 		--Waffenwechsel
 			if key == "1" and weaponLevel[1] > 0 then
-				spaceship.weapon = "LMG"
+				spaceship.weapon = "lmg"
 			elseif key == "2" and weaponLevel[2] > 0 then
 				spaceship.weapon = "Laser"
 			elseif key == "3" and weaponLevel[3] > 0 then
@@ -1691,7 +1710,7 @@ function setLaserLength(xPosition)
 	
 	if xPosition < 78 then return end
 	
-	spaceship.laser.laserLength = xPosition - 78
+	spaceship.laser.laserLength = xPosition - 75
 	
 end
 
@@ -1715,7 +1734,7 @@ function boxCollide(rect1, rect2)
   
   return rect1.x < rect2x2 and rect1x2 > rect2.x and rect1.y < rect2y2 and rect1y2 > rect2.y
   
-end	
+end
 	
 function spawnPowerup(powerupType, x, y)
 	if powerupType == "health25" then
@@ -1964,8 +1983,8 @@ function spawnSINBullet(type)
 	local startX = spaceship.x + 66
 	local startY = spaceship.y + 20
 	
-	local bulletSpeed = spaceship.lmg.bulletSpeed       
-									   
-	table.insert(spaceship.SIN.bullets, {x = startX, y = startY, w = 1, h = 1,mathX = 0, type = type})
+	local bulletSpeed = spaceship.lmg.bulletSpeed
+                              
+	table.insert(spaceship.SIN.bullets, {x = startX, y = startY, sx = startX, sy = startY, w = 1, h = 1, mathX = 0, type = type, sintime = 0})
 
 end
