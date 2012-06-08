@@ -59,14 +59,14 @@ function love.load()
 		
 		--[[
 			Gamestates:
-			intro = Destructive Reality Splash Screen
-			mainMenu = Hauptmenü ^^
-			pauseMenu = Pausenmenü ^^
-			game = Im Spiel
-			highscores = Highscores :P
-			optionsMenu = Optionsmenü
-			gameOver = Game Over-Bildschirm
-			upgrades = Ingame-Upgrade-Bildschirm
+				intro = Destructive Reality Splash Screen
+				mainMenu = Hauptmenü ^^
+				pauseMenu = Pausenmenü ^^
+				game = Im Spiel
+				highscores = Highscores :P
+				optionsMenu = Optionsmenü
+				gameOver = Game Over-Bildschirm
+				upgrades = Ingame-Upgrade-Bildschirm
 		--]]
 		
 		
