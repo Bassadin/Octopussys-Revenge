@@ -59,6 +59,7 @@ function love.load()
 		
 		--[[
 			Gamestates:
+			
 				intro = Destructive Reality Splash Screen
 				mainMenu = Hauptmenü ^^
 				pauseMenu = Pausenmenü ^^
