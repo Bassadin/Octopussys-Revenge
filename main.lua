@@ -58,8 +58,7 @@ function love.load()
 		versionNumber = "0.5.4"
 		
 		--[[
-			Gamestates:
-			
+			Gamestates:			
 				intro = Destructive Reality Splash Screen
 				mainMenu = Hauptmenü ^^
 				pauseMenu = Pausenmenü ^^
