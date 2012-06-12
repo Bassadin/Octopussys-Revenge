@@ -57,10 +57,8 @@ function love.load()
 		gameActive = false
 		versionNumber = "0.5.4"
 		
-		--[[
-		
-			Gamestates:
-			
+		--[[		
+			Gamestates:			
 				intro = Destructive Reality Splash Screen
 				mainMenu = Hauptmenü ^^
 				pauseMenu = Pausenmenü ^^
@@ -68,8 +66,7 @@ function love.load()
 				highscores = Highscores :P
 				optionsMenu = Optionsmenü
 				gameOver = Game Over-Bildschirm
-				upgrades = Ingame-Upgrade-Bildschirm
-				
+				upgrades = Ingame-Upgrade-Bildschirm				
 		--]]
 		
 		
@@ -181,9 +178,9 @@ function love.load()
 					]]--
 					
 					
-				weaponLevel = {[1] = 1, [2] = 0, [3] = 0}	
+				weaponLevel = {[1] = 1, [2] = 0, [3] = 0, [4] = 0}	
 				weaponDefaultLevel = weaponLevel	
-				weaponMaxLevel = {[1] = 5, [2] = 5, [3] = 2}	
+				weaponMaxLevel = {[1] = 5, [2] = 5, [3] = 2, [4] = 3}	
 
 				weaponUpgradePrices = {
 								
@@ -211,6 +208,15 @@ function love.load()
 					
 						[1] = 500,
 						[2] = 1000
+						
+					},
+					
+					[4] = {
+					
+						[1] = 500
+						[2] = 750
+						[3] = 1000
+					
 					}
 				
 				}
@@ -432,6 +438,19 @@ function love.load()
 				
 				amplitude = 50,
 				waveLength = 70
+			
+			},
+			
+			mines = {
+			
+				ammoConsumption = 10,
+				defaultBulletDamage = 50,
+				bulletDamage = 50,
+				bulletFireRate = 0.15,
+				bulletShootingTime = 0,
+				bulletSpeed = 1200,
+				bullets = {},
+				shooting = false	
 			
 			},
 			
@@ -761,7 +780,7 @@ function love.update(dt)
 							if spaceship.y > screenheight - 50 then spaceship.y = screenheight - 50 end
 							
 						--Schießen
-							--lmg	
+							--LMG	
 								if lkid(" ") and spaceship.weapon == "lmg" and weaponLevel[1] > 0 then
 									spaceship.lmg.shooting = true
 								else
@@ -943,6 +962,42 @@ function love.update(dt)
 										if boxCollide(spaceship.SIN.bullets[ii], enemies[i]) == true and enemies[i].health > 0 then
 											applyDamageToEnemy(i, spaceship.SIN.bulletDamage)
 											table.remove(spaceship.SIN.bullets, ii)
+										end
+									
+									end
+								end
+								
+							--Mines	
+								if lkid(" ") and spaceship.weapon == "mines" and weaponLevel[4] > 0 then
+									spaceship.mines.shooting = true
+								else
+									spaceship.mines.shooting = false
+								end
+								
+								if spaceship.mines.shooting == true and spaceship.ammo > 0 and spaceship.mines.bulletShootingTime >= spaceship.mines.bulletFireRate then
+									mgSound:stop()
+									mgSound:play()
+									
+									spawnMine()
+									
+									spaceship.mines.bulletShootingTime = 0
+								end
+								
+								for i,v in ipairs(spaceship.mines.bullets) do
+									v["x"] = v["x"] + (v["dx"] * dt)
+									v["y"] = v["y"] + (v["dy"] * dt)
+								end
+								
+								for i,v in ipairs(spaceship.mines.bullets) do
+									if v["x"] > screenwidth + 20 then table.remove(spaceship.mines.bullets, i) end
+								end
+								
+								for i,v in ipairs(enemies) do
+									for ii,vv in ipairs(spaceship.mines.bullets) do
+									
+										if boxCollide(spaceship.mines.bullets[ii],enemies[i]) == true and enemies[i].health > 0 then
+											applyDamageToEnemy(i, spaceship.mines.bulletDamage)
+											table.remove(spaceship.mines.bullets, ii)
 										end
 									
 									end
