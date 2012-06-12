@@ -174,6 +174,7 @@ function love.load()
 						1 = lmg
 						2 = laser
 						3 = SIN-Shot
+						4 = Mines
 					
 					]]--
 					
@@ -449,7 +450,7 @@ function love.load()
 				bulletFireRate = 0.15,
 				bulletShootingTime = 0,
 				bulletSpeed = 1200,
-				bullets = {},
+				mines = {},
 				shooting = false	
 			
 			},
@@ -983,21 +984,12 @@ function love.update(dt)
 									spaceship.mines.bulletShootingTime = 0
 								end
 								
-								for i,v in ipairs(spaceship.mines.bullets) do
-									v["x"] = v["x"] + (v["dx"] * dt)
-									v["y"] = v["y"] + (v["dy"] * dt)
-								end
-								
-								for i,v in ipairs(spaceship.mines.bullets) do
-									if v["x"] > screenwidth + 20 then table.remove(spaceship.mines.bullets, i) end
-								end
-								
 								for i,v in ipairs(enemies) do
-									for ii,vv in ipairs(spaceship.mines.bullets) do
+									for ii,vv in ipairs(spaceship.mines.mines) do
 									
-										if boxCollide(spaceship.mines.bullets[ii],enemies[i]) == true and enemies[i].health > 0 then
+										if boxCollide(spaceship.mines.mines[ii],enemies[i]) == true and enemies[i].health > 0 then
 											applyDamageToEnemy(i, spaceship.mines.bulletDamage)
-											table.remove(spaceship.mines.bullets, ii)
+											table.remove(spaceship.mines.mines, ii)
 										end
 									
 									end
@@ -2044,5 +2036,14 @@ function spawnSINBullet(type)
 	local bulletSpeed = spaceship.lmg.bulletSpeed
                               
 	table.insert(spaceship.SIN.bullets, {x = startX, y = startY, sx = startX, sy = startY, w = 1, h = 1, mathX = 0, type = type, sintime = 0})
+
+end
+
+function spawnLMGBullet()
+
+	local startX = spaceship.x + 66
+	local startY = spaceship.y + 20
+									   
+	table.insert(spaceship.lmg.bullets, {x = startX, y = startY,w = 1, h = 1})
 
 end
