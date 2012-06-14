@@ -5,7 +5,8 @@ You can use our code for whatever, wherever and whenever you want, the classic o
 
 If you want to download the whole game as an executable, please go to our website: http://destructivereality.jimdo.com
 
-Have fun with our Code wishes Bastian Hodapp, Lead Programmer Destructive Reality
+Have fun with our Code!
+Bastian Hodapp, Lead Programmer Destructive Reality
 
 ------------------------------------------------------
 
