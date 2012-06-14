@@ -214,8 +214,8 @@ function love.load()
 					
 					[4] = {
 					
-						[1] = 500
-						[2] = 750
+						[1] = 500,
+						[2] = 750,
 						[3] = 1000
 					
 					}
@@ -1352,7 +1352,7 @@ function love.draw()
 						table.remove(powerups, i)
 						end
 				end	
-		--Schießen
+		--Waffenschüsse
 			--lmg	
 				for i,v in ipairs(spaceship.lmg.bullets) do
 					lg.draw(bullet, v["x"], v["y"], math.rad(90), 4, 4)
@@ -1364,6 +1364,10 @@ function love.draw()
 			--SIN	
 				for i,v in ipairs(spaceship.SIN.bullets) do
 					lg.draw(SINbullet, v["x"], v["y"], math.rad(0), 2, 2)
+				end
+			--mines	
+				for i,v in ipairs(spaceship.mines.mines) do
+					lg.draw(bullet, v["x"], v["y"], math.rad(0), 4, 4)
 				end
 			
 		--Gegner
