@@ -1700,12 +1700,27 @@ function love.keypressed(key, unicode)
 			end
 			
 		--Waffenwechsel
-			if key == "1" and weaponLevel[1] > 0 then
-				spaceship.weapon = "lmg"
-			elseif key == "2" and weaponLevel[2] > 0 then
-				spaceship.weapon = "Laser"
-			elseif key == "3" and weaponLevel[3] > 0 then
-				spaceship.weapon = "SIN-Shot"
+			if key == "1" then
+				if weaponLevel[1] > 0 then	
+					spaceship.weapon = "lmg"
+				else
+					errorSound:stop()
+					errorSound:play()
+				end
+			elseif key == "2" then
+				if weaponLevel[2] > 0 then
+					spaceship.weapon = "Laser"
+				else
+					errorSound:stop()
+					errorSound:play()
+				end
+			elseif key == "3" then
+				if weaponLevel[3] > 0 then	
+					spaceship.weapon = "SIN-Shot"
+				else
+					errorSound:stop()
+					errorSound:play()
+				end
 			end
 			
 		--Debuggeld
