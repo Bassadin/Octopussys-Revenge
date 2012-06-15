@@ -1,8 +1,4 @@
 Weapon : Light Machine Gun (LMG) 
 Weapon : Laser
 Weapon : SIN-Shot
-Weapon : Rocket Launcher 
 Weapon : Mine 
-Ship : Weapon System 
-Ship : Thruster 
-Ship : Shield 
