@@ -2058,7 +2058,7 @@ function spawnSINBullet(type)
 
 end
 
-function spawnLMGBullet()
+function spawnMine()
 
 	local startX = spaceship.x + 66
 	local startY = spaceship.y + 20
