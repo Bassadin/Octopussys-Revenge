@@ -148,7 +148,7 @@ function love.load()
 			optionsMenu = gwee.Group(gwee.Box(230, 200, 350, 250), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))				
 				soundsVolume = optionsMenu:add(gwee.Slider(0, 1, "Sound Volume"))
 					soundsVolume.value = config.soundsVolume
-				musicVolume = optionsMenu:add(gwee.Slider(0, .4, "Music Volume"))
+				musicVolume = optionsMenu:add(gwee.Slider(0, 1, "Music Volume"))
 					musicVolume.value = config.musicVolume
 				optionsMenu:add(gwee.Button(function() 
 					if gameActive then 
