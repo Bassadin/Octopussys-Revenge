@@ -57,7 +57,8 @@ function love.load()
 		gameActive = false
 		versionNumber = "0.5.4"
 		
-		--[[		
+		--[[	
+		
 			Gamestates:			
 				intro = Destructive Reality Splash Screen
 				mainMenu = Hauptmenü ^^
@@ -67,6 +68,7 @@ function love.load()
 				optionsMenu = Optionsmenü
 				gameOver = Game Over-Bildschirm
 				upgrades = Ingame-Upgrade-Bildschirm	
+				
 		--]]
 		
 		
