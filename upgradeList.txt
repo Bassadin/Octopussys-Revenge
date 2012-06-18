@@ -1,3 +1,4 @@
 Weapon : Light Machine Gun (LMG) 
 Weapon : Laser
 Weapon : SIN-Shot
+Weapon : Mines
