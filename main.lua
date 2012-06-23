@@ -53,7 +53,7 @@ function love.load()
 	
 	--Allgemeine Variablen
 		cursorVisible = false
-		gameState = "intro"
+		gameState = "optionsMenu"
 		gameActive = false
 		versionNumber = "0.5.4"
 		
@@ -66,7 +66,7 @@ function love.load()
 				highscores = Highscores :P
 				optionsMenu = Optionsmenü
 				gameOver = Game Over-Bildschirm
-				upgrades = Ingame-Upgrade-Bildschirm					
+				upgrades = Ingame-Upgrade-Bildschirm				
 		--]]
 		
 		
@@ -144,20 +144,31 @@ function love.load()
 						end, "Save"))						
 					gameOverMenu.enabled = false
 	
-			--Optionsmenü
-			optionsMenu = gwee.Group(gwee.Box(230, 200, 350, 250), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))				
-				soundsVolume = optionsMenu:add(gwee.Slider(0, 1, "Sound Volume"))
+			--Optionsmenü Sound
+			optionsMenuSound = gwee.Group(gwee.Box(120, 220, 300, 190), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))				
+				soundsVolume = optionsMenuSound:add(gwee.Slider(0, 1, "Sound Volume"))
 					soundsVolume.value = config.soundsVolume
-				musicVolume = optionsMenu:add(gwee.Slider(0, 1, "Music Volume"))
+				musicVolume = optionsMenuSound:add(gwee.Slider(0, 1, "Music Volume"))
 					musicVolume.value = config.musicVolume
-				optionsMenu:add(gwee.Button(function() 
-					if gameActive then 
-						gameState = "pauseMenu"
-					else gameState = "mainMenu" end
-
-				end, "Back"))
-				optionsMenu.enabled = false
+				optionsMenuSound.enabled = false
 				
+				
+			--Optionsmenü Grafik
+				optionsMenuGraphics = gwee.Group(gwee.Box(230, 200, 350, 250), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))	
+				
+				optionsMenuGraphics.enabled = false
+				
+				
+			--Optionsmenü Zurück-Button
+				optionsMenuBackButton = gwee.Group(gwee.Box(220, 450, 360, 40), gwee.VerticalLayout(0), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))
+					optionsMenuBackButton:add(gwee.Button(function() 
+						if gameActive then 
+							gameState = "pauseMenu"
+						else gameState = "mainMenu" end
+					end, "Back to Main Menu"))
+					
+				optionsMenuBackButton.enabled = false
+			
 			
 			--Upgrade List Table
 				
@@ -644,7 +655,9 @@ function love.update(dt)
 			mainMenu.enabled = false
 			pauseMenu.enabled = false
 			highscoreMenu.enalbed = false
-			optionsMenu.enabled = false
+			optionsMenuSound.enabled = false
+			optionsMenuGraphics.enabled = false
+			optionsMenuBackButton.enabled = false
 			
 				
 				
@@ -1181,7 +1194,9 @@ function love.update(dt)
 			mainMenu.enabled = false
 			pauseMenu.enabled = false
 			highscoreMenu.enabled = true
-			optionsMenu.enabled = false
+			optionsMenuSound.enabled = false
+			optionsMenuGraphics.enabled = false
+			optionsMenuBackButton.enabled = false
 					
 	
 	end
@@ -1199,7 +1214,9 @@ function love.update(dt)
 			mainMenu.enabled = true
 			pauseMenu.enabled = false
 			highscoreMenu.enabled = false
-			optionsMenu.enabled = false			
+			optionsMenuSound.enabled = false
+			optionsMenuGraphics.enabled = false	
+			optionsMenuBackButton.enabled = false			
 				
 				--Tables zurücksetzen
 					gameReset()
@@ -1210,7 +1227,9 @@ function love.update(dt)
 			--Gwee
 				mainMenu.enabled = false
 				highscoreMenu.enabled = false
-				optionsMenu.enabled = false
+				optionsMenuSound.enabled = false
+				optionsMenuGraphics.enabled = false
+				optionsMenuBackButton.enabled = false
 				
 	
 			worm.y = lg.getHeight() - worm.scrollY
@@ -1242,7 +1261,9 @@ function love.update(dt)
 			mainMenu.enabled = false
 			pauseMenu.enabled = false
 			highscoreMenu.enabled = false
-			optionsMenu.enabled = false
+			optionsMenuSound.enabled = false
+			optionsMenuGraphics.enabled = false
+			optionsMenuBackButton.enabled = false
 			
 		--Moneyvariablenfarbe
 			if moneyFontIsRedTime > 0 then
@@ -1265,7 +1286,9 @@ function love.update(dt)
 
 	
 		--Gwee
-			optionsMenu.enabled = false
+			optionsMenuSound.enabled = false
+			optionsMenuGraphics.enabled = false
+			optionsMenuBackButton.enabled = false
 			gameOverMenu.enabled = true
 			
 		
@@ -1280,7 +1303,9 @@ function love.update(dt)
 			mainMenu.enabled = false
 			pauseMenu.enabled = false
 			highscoreMenu.enabled = false
-			optionsMenu.enabled = true
+			optionsMenuSound.enabled = true
+			optionsMenuGraphics.enabled = true
+			optionsMenuBackButton.enabled = true
 	
 	end
 	
