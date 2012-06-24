@@ -145,7 +145,7 @@ function love.load()
 					gameOverMenu.enabled = false
 	
 			--Optionsmenü Sound
-			optionsMenuSound = gwee.Group(gwee.Box(120, 220, 300, 190), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))				
+			optionsMenuSound = gwee.Group(gwee.Box(120, 260, 300, 190), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))				
 				soundsVolume = optionsMenuSound:add(gwee.Slider(0, 1, "Sound Volume"))
 					soundsVolume.value = config.soundsVolume
 				musicVolume = optionsMenuSound:add(gwee.Slider(0, 1, "Music Volume"))
@@ -160,7 +160,7 @@ function love.load()
 				
 				
 			--Optionsmenü Zurück-Button
-				optionsMenuBackButton = gwee.Group(gwee.Box(220, 450, 360, 40), gwee.VerticalLayout(0), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))
+				optionsMenuBackButton = gwee.Group(gwee.Box(220, 520, 360, 40), gwee.VerticalLayout(0), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))
 					optionsMenuBackButton:add(gwee.Button(function() 
 						if gameActive then 
 							gameState = "pauseMenu"
@@ -372,6 +372,7 @@ function love.load()
 	
 	--Fonts laden
 		font = lg.newFont("fonts/font.ttf", 15)
+		fontMid = lg.newFont("fonts/font.ttf", 27)
 		fontBig = lg.newFont("fonts/font.ttf", 36)
 			lg.setFont(font)
 		
@@ -1687,6 +1688,11 @@ function love.draw()
 			
 		--Titelbild
 			lg.draw(optionsMenuTitleIMG, lg.getWidth() / 2 - optionsMenuTitleIMG:getWidth() / 2 , 0, 0, 1, 1)
+			
+		--Unterüberschriften
+			lg.setFont(fontMid)
+				lg.print("Sound settings", 70, 160)
+			lg.setFont(font)
 	
 	end
 end
