@@ -145,7 +145,7 @@ function love.load()
 					gameOverMenu.enabled = false
 	
 			--Optionsmenü Sound
-			optionsMenuSound = gwee.Group(gwee.Box(120, 260, 300, 190), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))				
+			optionsMenuSound = gwee.Group(gwee.Box(120, 260, 280, 190), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))				
 				soundsVolume = optionsMenuSound:add(gwee.Slider(0, 1, "Sound Volume"))
 					soundsVolume.value = config.soundsVolume
 				musicVolume = optionsMenuSound:add(gwee.Slider(0, 1, "Music Volume"))
@@ -154,8 +154,10 @@ function love.load()
 				
 				
 			--Optionsmenü Grafik
-				optionsMenuGraphics = gwee.Group(gwee.Box(230, 200, 350, 250), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))	
+				vSyncActivated = false
 				
+				optionsMenuGraphics = gwee.Group(gwee.Box(470, 230, 280, 100), gwee.VerticalLayout(35), "",  gwee.loadSkin("styles/pauseMenuGweeStyle"))	
+					vSyncButton = optionsMenuGraphics:add(gwee.CheckBox("vSync:"))
 				optionsMenuGraphics.enabled = false
 				
 				
@@ -529,6 +531,7 @@ function love.load()
 		--Grafikeinstellungen
 			screenwidth = lg.getWidth()
 			screenheight = lg.getHeight()
+			
 		
 		--DeltaTime
 			dt = love.timer.getDelta( )
@@ -548,6 +551,14 @@ function love.update(dt)
 		
 	--Grafikeinstellungen
 		scanGraphicSettings()
+		
+		if vSyncButton.checked == true and vSyncActivated == false then
+			love.graphics.setMode(systemScreen.width, systemScreen.height, systemScreen.fullscreen, true, systemScreen.fsaa)
+			vSyncActivated = true
+		elseif vSyncButton.checked == false and vSyncActivated == true then
+			love.graphics.setMode(systemScreen.width, systemScreen.height, systemScreen.fullscreen, false, systemScreen.fsaa)
+			vSyncActivated = false
+		end
 	
 	--Zeit
 		--Schüsse
@@ -1692,9 +1703,14 @@ function love.draw()
 		--Unterüberschriften
 			lg.setFont(fontMid)
 				lg.print("Sound settings", 70, 160)
+				lg.print("Graphic settings", 450, 160)
 			lg.setFont(font)
 	
 	end
+	
+	--DEBUG
+		debugPrint()
+	
 end
 
 function love.keypressed(key, unicode)
@@ -2095,5 +2111,12 @@ function spawnMine()
 	local startY = spaceship.y + 20
 									   
 	table.insert(spaceship.lmg.bullets, {x = startX, y = startY,w = 1, h = 1})
+
+end
+
+function debugPrint()
+
+	--lg.print(tostring(vSyncActivated), 10, 10)
+	--lg.print(tostring(vSyncButton.checked), 10, 30)
 
 end
