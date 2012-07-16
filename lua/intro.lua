@@ -32,7 +32,6 @@ function intro.update(dt)
 			pauseMenu.enabled = false
 			mainMenu.enabled = false
 			highscoreMenu.enabled = false
-			optionsMenu.enabled = false	
 	
 		if fadeAlpha > 0 and timer ~= .75 then
 			fadeAlpha = fadeAlpha - 150 * dt
