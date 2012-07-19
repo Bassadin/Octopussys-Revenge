@@ -53,7 +53,7 @@ function love.load()
 	
 	--Allgemeine Variablen
 		cursorVisible = false
-		gameState = "optionsMenu"
+		gameState = "intro"
 		gameActive = false
 		versionNumber = "0.5.4"
 		
@@ -192,7 +192,7 @@ function love.load()
 					]]--
 					
 					
-				weaponLevel = {[1] = 1, [2] = 0, [3] = 0, [4] = 0}	
+				weaponLevel = {[1] = 1, [2] = 0, [3] = 0, [4] = 1}	
 				weaponDefaultLevel = weaponLevel	
 				weaponMaxLevel = {[1] = 5, [2] = 5, [3] = 2, [4] = 3}	
 
@@ -263,9 +263,14 @@ function love.load()
 		
 		--Bullets
 			bullet = lg.newImage("gfx/entities/bullets/Bullet.png")
+			
 			SINbullet = lg.newImage("gfx/entities/bullets/SINBullet.png")
 			
+			mineIdleIMG = lg.newImage("gfx/entities/bullets/mineIdle.png")
+			--mineBulletExplosionIMG = lg.newImage("gfx/entities/bullets/mineExplosion.png")
+			
 			slimeBulletIMG = lg.newImage("gfx/entities/bullets/slimeBullet.png")
+			
 			octopussyBulletIMG = lg.newImage("gfx/entities/bullets/octopussyBullet.png")
 		
 		--GUI
@@ -403,7 +408,7 @@ function love.load()
 			healthRegenerationRate = 5,
 			healthRegenerationAmount = 1,
 			weapon = "lmg",
-			moveSpeed = 300,
+			moveSpeed = 400,
 			ammo = 100,
 			maxAmmo = 100,
 			ammoRegenSpeed = 30,
@@ -460,8 +465,8 @@ function love.load()
 			
 				ammoConsumption = 10,
 				defaultBulletDamage = 50,
-				bulletDamage = 50,
-				bulletFireRate = 0.15,
+				bulletDamage = 500,
+				bulletFireRate = 0.2,
 				bulletShootingTime = 0,
 				bulletSpeed = 1200,
 				mines = {},
@@ -565,6 +570,7 @@ function love.update(dt)
 			spaceship.lmg.bulletShootingTime = spaceship.lmg.bulletShootingTime + dt
 			spaceship.laser.laserDamageTime = spaceship.laser.laserDamageTime + dt
 			spaceship.SIN.bulletShootingTime = spaceship.SIN.bulletShootingTime + dt
+			spaceship.mines.bulletShootingTime = spaceship.mines.bulletShootingTime + dt
 		
 		enemySpawnTime = enemySpawnTime + dt
 		healthRegenerationTime = healthRegenerationTime + dt
@@ -699,8 +705,6 @@ function love.update(dt)
 						enemies[i].bulletAnimation:update(dt)
 					end
 				end
-
-				slimeball:update(dt)
 				
 				for i,v in ipairs(powerups) do
 					v["idleAnimation"]:update(dt)
@@ -994,6 +998,10 @@ function love.update(dt)
 								end
 								
 							--Mines	
+								for i,v in ipairs(spaceship.mines.mines) do
+									v["normalAnimation"]:update(dt)
+								end
+							
 								if lkid(" ") and spaceship.weapon == "mines" and weaponLevel[4] > 0 then
 									spaceship.mines.shooting = true
 								else
@@ -1007,6 +1015,7 @@ function love.update(dt)
 									spawnMine()
 									
 									spaceship.mines.bulletShootingTime = 0
+									spaceship.ammo = spaceship.ammo - spaceship.mines.ammoConsumption
 								end
 								
 								for i,v in ipairs(enemies) do
@@ -1171,7 +1180,7 @@ function love.update(dt)
 				elseif spaceship.laser.laserActive == true then		
 					spaceship.ammo = spaceship.ammo - spaceship.laser.ammoConsumption * dt			
 				elseif spaceship.SIN.shooting == true then		
-					spaceship.ammo = spaceship.ammo - spaceship.SIN.ammoConsumption * dt			
+					spaceship.ammo = spaceship.ammo - spaceship.SIN.ammoConsumption * dt						
 				end
 			
 			end
@@ -1404,7 +1413,7 @@ function love.draw()
 				end
 			--mines	
 				for i,v in ipairs(spaceship.mines.mines) do
-					lg.draw(bullet, v["x"], v["y"], math.rad(0), 4, 4)
+					v["normalAnimation"]:draw(v["x"], v["y"])
 				end
 			
 		--Gegner
@@ -1768,6 +1777,13 @@ function love.keypressed(key, unicode)
 					errorSound:stop()
 					errorSound:play()
 				end
+			elseif key == "4" then
+				if weaponLevel[4] > 0 then	
+					spaceship.weapon = "mines"
+				else
+					errorSound:stop()
+					errorSound:play()
+				end
 			end
 			
 		--Debuggeld
@@ -1914,8 +1930,8 @@ function spawnEnemy(enemyType)
 			bulletAnimation = newAnimation(octopussyBulletIMG, 32, 32, 0.1, 0),
 						
 			shootingTime = 0,
-			shootingRate = math.random(2, 4),
-			bulletSpeed = 500
+			shootingRate = math.random(1.5, 2),
+			bulletSpeed = 550
 		})
 		
 	elseif enemyType == "slime" then
@@ -1940,8 +1956,8 @@ function spawnEnemy(enemyType)
 			bulletAnimation = newAnimation(slimeBulletIMG, 32, 32, 0.1, 0),
 			
 			shootingTime = 0,
-			shootingRate = math.random(3, 4),
-			bulletSpeed = 500
+			shootingRate = math.random(1.2, 2.5),
+			bulletSpeed = 450
 		})
 	elseif enemyType == "muscaBlue" then
 		table.insert(enemies, {
@@ -2110,13 +2126,12 @@ function spawnMine()
 	local startX = spaceship.x + 66
 	local startY = spaceship.y + 20
 									   
-	table.insert(spaceship.lmg.bullets, {x = startX, y = startY,w = 1, h = 1})
+	table.insert(spaceship.mines.mines, {x = startX, y = startY,w = 1, h = 1, normalAnimation = newAnimation(mineIdleIMG, 32, 32, 0.2, 0)})
 
 end
 
 function debugPrint()
 
-	--lg.print(tostring(vSyncActivated), 10, 10)
-	--lg.print(tostring(vSyncButton.checked), 10, 30)
+	lg.print(#spaceship.mines.mines, 10, 10)
 
 end
