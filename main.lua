@@ -192,7 +192,7 @@ function love.load()
 					]]--
 					
 					
-				weaponLevel = {[1] = 1, [2] = 0, [3] = 0, [4] = 1}	
+				weaponLevel = {[1] = 1, [2] = 0, [3] = 0, [4] = 0}	
 				weaponDefaultLevel = weaponLevel	
 				weaponMaxLevel = {[1] = 5, [2] = 5, [3] = 2, [4] = 3}	
 
@@ -213,23 +213,23 @@ function love.load()
 						[1] = 100,
 						[2] = 200,
 						[3] = 300,
-						[4] = 600,
-						[5] = 900
+						[4] = 400,
+						[5] = 500
 					
 					},
 
 					[3] = {
 					
-						[1] = 500,
-						[2] = 1000
+						[1] = 100,
+						[2] = 200
 						
 					},
 					
 					[4] = {
 					
-						[1] = 500,
-						[2] = 750,
-						[3] = 1000
+						[1] = 100,
+						[2] = 200,
+						[3] = 300
 					
 					}
 				
@@ -267,7 +267,7 @@ function love.load()
 			SINbullet = lg.newImage("gfx/entities/bullets/SINBullet.png")
 			
 			mineIdleIMG = lg.newImage("gfx/entities/bullets/mineIdle.png")
-			--mineBulletExplosionIMG = lg.newImage("gfx/entities/bullets/mineExplosion.png")
+			mineExplosionIMG = lg.newImage("gfx/entities/bullets/mineExplosion.png")
 			
 			slimeBulletIMG = lg.newImage("gfx/entities/bullets/slimeBullet.png")
 			
@@ -1000,6 +1000,7 @@ function love.update(dt)
 							--Mines	
 								for i,v in ipairs(spaceship.mines.mines) do
 									v["normalAnimation"]:update(dt)
+									v["explosionAnimation"]:update(dt)
 								end
 							
 								if lkid(" ") and spaceship.weapon == "mines" and weaponLevel[4] > 0 then
@@ -1023,7 +1024,12 @@ function love.update(dt)
 									
 										if boxCollide(spaceship.mines.mines[ii],enemies[i]) == true and enemies[i].health > 0 then
 											applyDamageToEnemy(i, spaceship.mines.bulletDamage)
-											table.remove(spaceship.mines.mines, ii)
+											
+											vv["isDestroyed"] = true													
+										elseif vv["isDestroyed"] == false then
+													
+												vv["explosionAnimation"]:reset()
+												
 										end
 									
 									end
@@ -1415,6 +1421,26 @@ function love.draw()
 				for i,v in ipairs(spaceship.mines.mines) do
 					v["normalAnimation"]:draw(v["x"], v["y"])
 				end
+				
+				--Explosion
+					for i,v in ipairs(spaceship.mines.mines) do
+						if v["isDestroyed"] == false then	
+						
+							v["normalAnimation"]:draw(v["x"], v["y"])	
+							
+						elseif v["isDestroyed"] == true then		
+						
+							v["explosionAnimation"]:draw(v["x"], v["y"])
+							v["explosionAnimation"]:play()
+							
+						end			
+						
+						if v["explosionAnimation"]:getCurrentFrame() == 6 then
+							
+							table.remove(spaceship.mines.mines, i)
+							
+						end
+					end	
 			
 		--Gegner
 			--Gegner zeichnen
@@ -1915,7 +1941,7 @@ function spawnEnemy(enemyType)
 			w = 62,
 			h = 62,
 			
-			speed = math.random(60, 100),
+			speed = math.random() + math.random(60, 100),
 			health = 100, 
 			damaging = true,
 			enemyType = "octopussy", 
@@ -1930,7 +1956,7 @@ function spawnEnemy(enemyType)
 			bulletAnimation = newAnimation(octopussyBulletIMG, 32, 32, 0.1, 0),
 						
 			shootingTime = 0,
-			shootingRate = math.random(1.5, 2),
+			shootingRate = math.random() + math.random(1.4, 2),
 			bulletSpeed = 550
 		})
 		
@@ -1941,7 +1967,7 @@ function spawnEnemy(enemyType)
 			w = 62,
 			h = 62,
 			
-			speed = math.random(40, 65),
+			speed = math.random() + math.random(40, 65),
 			health = 200, 
 			damaging = true,
 			enemyType = "slime", 
@@ -1956,7 +1982,7 @@ function spawnEnemy(enemyType)
 			bulletAnimation = newAnimation(slimeBulletIMG, 32, 32, 0.1, 0),
 			
 			shootingTime = 0,
-			shootingRate = math.random(1.2, 2.5),
+			shootingRate = math.random() + math.random(1.2, 2.5),
 			bulletSpeed = 450
 		})
 	elseif enemyType == "muscaBlue" then
@@ -2123,15 +2149,17 @@ end
 
 function spawnMine()
 
-	local startX = spaceship.x + 66
+	local startX = spaceship.x + 100
 	local startY = spaceship.y + 20
 									   
-	table.insert(spaceship.mines.mines, {x = startX, y = startY,w = 1, h = 1, normalAnimation = newAnimation(mineIdleIMG, 32, 32, 0.2, 0)})
+	table.insert(spaceship.mines.mines, {x = startX, y = startY, w = 1, h = 1, isDestroyed = false, normalAnimation = newAnimation(mineIdleIMG, 32, 32, 0.2, 0), explosionAnimation = newAnimation(mineExplosionIMG, 32, 32, 0.05, 0)})
 
 end
 
 function debugPrint()
 
-	lg.print(#spaceship.mines.mines, 10, 10)
-
+	if #spaceship.mines.mines > 0 then
+		lg.print(tostring(spaceship.mines.mines[1].isDestroyed), 10, 40)
+	end
+		
 end
