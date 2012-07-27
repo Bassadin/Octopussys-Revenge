@@ -2109,6 +2109,8 @@ function gameReset()
 
 	enemies = {}
 	spaceship.lmg.bullets = {}
+	spaceship.SIN.bullets = {}
+	spaceship.mines.mines = {}
 	powerups = {}
 	money = 0
 	spaceship.y = 300
