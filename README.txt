@@ -3,18 +3,17 @@ Hello, Guys ^^
 This is our GitHub Repository and you can see our messily source code here ^^
 You can use our code for whatever, wherever and whenever you want, the classic open source principle
 
-If you want to download the whole game as an executable, please go to our website: http://destructivereality.jimdo.com
+If you want to download the whole game as an executable, please go to: https://www.indiedb.com/games/octopussys-revenge
 
 Have fun with our Code!
-Bastian Hodapp, Lead Programmer Destructive Reality
 
 ------------------------------------------------------
 
 Hallo, Leute ^^
 
-Dies ist unser GitHub Repository, in dem ihr euch in aller Ruhe unseren schön unordentlichen Sourcecode ansehen könnt ^^
-Spaß beseite, ihr dürft den Code verwenden, wie ihr wollt, wann ihr wollt, wofür ihr wollt, das klassische Open Source eben ^^
+Dies ist unser GitHub Repository, in dem ihr euch in aller Ruhe unseren schÃ¶n unordentlichen Sourcecode ansehen kÃ¶nnt ^^
+SpaÃŸ beseite, ihr dÃ¼rft den Code verwenden, wie ihr wollt, wann ihr wollt, wofÃ¼r ihr wollt, das klassische Open Source eben ^^
 
-Wenn ihr das Spiel als Ganzes herunterladen wollt, geht doch bitte auf unsere Website: http://destructivereality.jimdo.com
+Wenn ihr das Spiel als Ganzes herunterladen wollt, geht auf: https://www.indiedb.com/games/octopussys-revenge
 
-Viel Spaß mit unserem Code wünscht euch Bastian Hodapp, Lead Programmer Destructive Reality
+Viel SpaÃŸ mit unserem Code!
